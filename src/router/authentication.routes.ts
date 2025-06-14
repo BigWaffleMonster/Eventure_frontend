@@ -1,14 +1,25 @@
+import AuthLayout from '@/Layouts/AuthLayout.vue'
+import { LoginPage } from '@/Pages/LoginPage'
+import { RegistrationPage } from '@/Pages/RegistrationPage'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const authenticationRoutes = [
   {
-    path: '/login',
-    name: 'authentication/login',
-    component: () => import('@/views/Authentication/LoginView.vue'),
-  },
-  {
-    path: '/register',
-    name: 'authentication/registration',
-    component: () => import('@/views/Authentication/RegistrationView.vue'),
+    path: '/auth',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        name: 'authentication/login',
+        component: LoginPage,
+        meta: { title: 'Вход' },
+      },
+      {
+        path: 'register',
+        name: 'authentication/registration',
+        component: RegistrationPage,
+        meta: { title: 'Регистрация' },
+      },
+    ],
   },
 ] satisfies RouteRecordRaw[]
