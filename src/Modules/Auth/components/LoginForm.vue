@@ -13,10 +13,10 @@ import {
 } from '@/UI/shadcn/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/UI/shadcn/components/ui/card'
 import { Input } from '@/UI/shadcn/components/ui/input'
-import { useLoginStore } from '../store/loginStore'
+import { useAuthStore } from '../store/authStore'
 import { Login } from '../api/login'
 
-const { setUser } = useLoginStore()
+const { setUser } = useAuthStore()
 
 const formSchema = toTypedSchema(
   z.object({

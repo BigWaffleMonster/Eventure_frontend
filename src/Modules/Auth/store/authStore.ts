@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { authType } from '../types/authType'
+import type { authType } from '../types/authType.js'
 
-export const useLoginStore = defineStore('loginStore', () => {
+export const useAuthStore = defineStore('auth', () => {
   const user = ref<authType>({
     id: null,
     email: null,
@@ -16,5 +16,9 @@ export const useLoginStore = defineStore('loginStore', () => {
     user.value = data
   }
 
-  return { user, setUser }
+  function getUser() {
+    return user.value
+  }
+
+  return { user, setUser, getUser }
 })

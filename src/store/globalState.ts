@@ -1,8 +1,13 @@
-import { defineStore } from 'pinia'
-import { useLoginStore } from '@/Modules/Auth'
+import { defineStore, storeToRefs } from 'pinia'
+import { useAuthStore } from '@/Modules/Auth'
+import { useApiStore } from '@/api/apiStore'
 
-export const useCounterStore = defineStore('counter', () => {
-  const user = useLoginStore()
+export const useGlobalState = defineStore('global', () => {
+  const authStore = useAuthStore()
+  const { user } = storeToRefs(authStore)
 
-  return { user }
+  const apiStore = useApiStore()
+  const { getAxios, setAxios } = apiStore
+
+  return { user, getAxios, setAxios }
 })
