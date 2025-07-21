@@ -3,7 +3,6 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 
-import { Button } from '@/UI/shadcn/components/ui/button'
 import {
   FormControl,
   FormField,
@@ -11,10 +10,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/UI/shadcn/components/ui/form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/UI/shadcn/components/ui/card'
 import { Input } from '@/UI/shadcn/components/ui/input'
 import { useAuthStore } from '../store/authStore'
 import { Login } from '../api/login'
+import AuthCard from '@/UI/Card/AuthCard.vue'
 
 const { setUser } = useAuthStore()
 
@@ -49,44 +48,35 @@ const handleSubmit = form.handleSubmit(async (values) => {
       refreshToken: '44556677',
     },
   }
+  console.log(values, user)
   setUser(user)
-  // setUser({ id: data.id, nickName: data?.nickName ? data.nickName : data.email })
 })
 </script>
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>{{ $route.meta.title }}</CardTitle>
-    </CardHeader>
-
-    <CardContent>
-      <form @submit="handleSubmit" class="w-full flex flex-col gap-4">
-        <FormField v-slot="{ componentField }" name="email">
-          <FormItem class="w-full">
-            <FormLabel>Email</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="email@email"
-                v-bind="componentField"
-                class="border-(--color-border)"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <FormField v-slot="{ componentField }" name="password">
-          <FormItem>
-            <FormLabel>Пароль</FormLabel>
-            <FormControl>
-              <Input type="password" v-bind="componentField" class="border-(--color-border)" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <Button class="cursor-pointer" type="submit"> Войти </Button>
-      </form>
-    </CardContent>
-  </Card>
+  <AuthCard :title="$route.meta.title" btn-name="Войти" @submitForm="handleSubmit">
+    <FormField v-slot="{ componentField }" name="email">
+      <FormItem class="w-full">
+        <FormLabel>Email</FormLabel>
+        <FormControl>
+          <Input
+            type="text"
+            placeholder="email@email"
+            v-bind="componentField"
+            class="border-(--color-border)"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ componentField }" name="password">
+      <FormItem>
+        <FormLabel>Пароль</FormLabel>
+        <FormControl>
+          <Input type="password" v-bind="componentField" class="border-(--color-border)" />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+  </AuthCard>
 </template>

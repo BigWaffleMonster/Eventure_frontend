@@ -11,8 +11,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/UI/shadcn/components/ui/form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/UI/shadcn/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/UI/shadcn/components/ui/card'
 import { Input } from '@/UI/shadcn/components/ui/input'
+import { cn } from '@/UI/shadcn/lib/utils'
+import CardDescription from '@/UI/shadcn/components/ui/card/CardDescription.vue'
 
 const formSchema = toTypedSchema(
   z.object({
@@ -40,9 +48,10 @@ const handleSubmit = form.handleSubmit(async (values) => {
 <template>
   <div>
     <div>
-      <Card>
+      <Card :class="cn('w-[380px] h-[400px]', $attrs.class ?? '')">
         <CardHeader>
-          <CardTitle>{{ $route.meta.title }}</CardTitle>
+          <CardTitle class="text-center">{{ $route.meta.title }}</CardTitle>
+          <CardDescription>#event</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -70,9 +79,13 @@ const handleSubmit = form.handleSubmit(async (values) => {
                 <FormMessage />
               </FormItem>
             </FormField>
-            <Button class="cursor-pointer" type="submit"> Войти </Button>
+            <!-- <Button class="cursor-pointer" type="submit"> Войти </Button> -->
           </form>
         </CardContent>
+        <CardFooter class="flex justify-between">
+          <Button class="cursor-pointer" type="submit"> Логин </Button>
+          <Button class="cursor-pointer" type="submit"> Войти </Button>
+        </CardFooter>
       </Card>
       <Card>
         <CardHeader>
