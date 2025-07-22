@@ -21,6 +21,7 @@ import {
 import { Input } from '@/UI/shadcn/components/ui/input'
 import { cn } from '@/UI/shadcn/lib/utils'
 import CardDescription from '@/UI/shadcn/components/ui/card/CardDescription.vue'
+import EventCard from '@/Modules/Event/components/EventCard.vue'
 
 const formSchema = toTypedSchema(
   z.object({
@@ -48,6 +49,7 @@ const handleSubmit = form.handleSubmit(async (values) => {
 <template>
   <div>
     <div>
+      <EventCard class="mb-3" title="New event!!!" :status="false" />
       <Card :class="cn('w-[380px] h-[400px]', $attrs.class ?? '')">
         <CardHeader>
           <CardTitle class="text-center">{{ $route.meta.title }}</CardTitle>
