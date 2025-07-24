@@ -1,13 +1,17 @@
 import router from '@/router'
+import { useGlobalState } from '@/store/globalState'
 
-const registerUrl = 'http://127.0.0.1:8080/api/v1/register'
+const { getAxios } = useGlobalState()
+const $http = getAxios()
+
 export async function Register(email: string, password: string) {
   try {
-    const response = await fetch(registerUrl, {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
+    const response = await $http?.post('/register', {
+      email,
+      password,
     })
-    const { error } = await response.json()
+
+    const { error } = response?.data
     if (error) {
       throw new Error('Error on registering')
     }
