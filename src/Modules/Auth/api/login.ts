@@ -1,9 +1,8 @@
 import { useGlobalState } from '@/store/globalState'
 
-const { getAxios } = useGlobalState()
-const $http = getAxios()
-
 export async function Login(email: string, password: string) {
+  const { getAxios } = useGlobalState()
+  const $http = getAxios()
   try {
     const response = await $http?.post('/login', {
       email,

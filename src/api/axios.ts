@@ -1,10 +1,43 @@
 import axios from 'axios'
+import router from '@/router'
+
+const baseURL = 'http://127.0.0.1:8080/api/v1/'
+// const baseURL = 'https://jsonplaceholder.typicode.com/'
 
 export const axios_instance = axios.create({
-  baseURL: 'http://127.0.0.1:8080/api/v1/',
+  baseURL,
   timeout: 1000,
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-    'Content-Type': 'application/json',
-  },
 })
+
+axios_instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
+  return config
+})
+
+axios_instance.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  async (error) => {
+    const originalRequest = error.config
+    if (error.response.status === 401 && error.config && !error.config?._isRetry) {
+      originalRequest._isRetry = true
+      try {
+        const response = await axios.get(`${baseURL}refresh`, {
+          // withCredentials: true,
+        })
+        localStorage.setItem('token', response.data.accessToken)
+        return axios_instance.request(originalRequest)
+      } catch (e) {
+        router.push('/auth/login')
+        throw new Error('User not authorized')
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)

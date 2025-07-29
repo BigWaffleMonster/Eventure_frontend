@@ -49,7 +49,6 @@ const handleSubmit = form.handleSubmit(async (values) => {
 <template>
   <div>
     <div>
-      <EventCard class="mb-3" title="New event!!!" :status="false" />
       <Card :class="cn('w-[380px] h-[400px]', $attrs.class ?? '')">
         <CardHeader>
           <CardTitle class="text-center">{{ $route.meta.title }}</CardTitle>

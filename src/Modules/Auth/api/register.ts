@@ -1,10 +1,9 @@
 import router from '@/router'
 import { useGlobalState } from '@/store/globalState'
 
-const { getAxios } = useGlobalState()
-const $http = getAxios()
-
 export async function Register(email: string, password: string) {
+  const { getAxios } = useGlobalState()
+  const $http = getAxios()
   try {
     const response = await $http?.post('/register', {
       email,
@@ -17,6 +16,7 @@ export async function Register(email: string, password: string) {
     }
     router.push('/auth/login')
   } catch (err) {
-    console.log(err)
+    //need to throw error
+    console.log(err, 'AHAHAHAHAHA')
   }
 }
