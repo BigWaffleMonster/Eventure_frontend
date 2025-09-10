@@ -7,7 +7,7 @@ export const useGlobalState = defineStore('global', () => {
   const { user } = storeToRefs(authStore)
 
   const apiStore = useApiStore()
-  const { getAxios, setAxios } = apiStore
+  const { getAxios } = apiStore
 
-  return { user, getAxios, setAxios }
+  return { user, getAxios }
 })

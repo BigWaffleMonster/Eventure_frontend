@@ -21,7 +21,6 @@ import {
 import { Input } from '@/UI/shadcn/components/ui/input'
 import { cn } from '@/UI/shadcn/lib/utils'
 import CardDescription from '@/UI/shadcn/components/ui/card/CardDescription.vue'
-import EventCard from '@/Modules/Event/components/EventCard.vue'
 
 const formSchema = toTypedSchema(
   z.object({

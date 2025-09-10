@@ -4,6 +4,7 @@ import { useGlobalState } from '@/store/globalState'
 export async function Register(email: string, password: string) {
   const { getAxios } = useGlobalState()
   const $http = getAxios()
+
   try {
     const response = await $http?.post('/register', {
       email,

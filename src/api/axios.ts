@@ -19,8 +19,8 @@ axios_instance.interceptors.request.use((config) => {
 })
 
 axios_instance.interceptors.response.use(
-  (response) => {
-    return response
+  (config) => {
+    return config
   },
   async (error) => {
     const originalRequest = error.config
@@ -33,6 +33,7 @@ axios_instance.interceptors.response.use(
         localStorage.setItem('token', response.data.accessToken)
         return axios_instance.request(originalRequest)
       } catch (e) {
+        console.error(e)
         router.push('/auth/login')
         throw new Error('User not authorized')
       }
