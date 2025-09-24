@@ -4,17 +4,17 @@
   "typescript": true,
   "tailwind": {
     "config": "",
-    "css": "./src/assets/index.css",
+    "css": "app/assets/css/index.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "@/UI/shadcn/components",
-    "composables": "@/UI/shadcn/composables",
-    "utils": "@/UI/shadcn/lib/utils.ts",
-    "ui": "@/UI/shadcn/components/ui",
-    "lib": "@/UI/shadcn/lib"
+    "components": "@/ui/shadcn/components",
+    "composables": "@/ui/shadcn/composables",
+    "utils": "@/ui/shadcn/lib/utils",
+    "ui": "@/ui/shadcn/components/ui",
+    "lib": "@/ui/shadcn/lib"
   },
   "iconLibrary": "lucide"
 }

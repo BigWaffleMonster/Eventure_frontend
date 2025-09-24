@@ -1,28 +1,26 @@
 {
+  // https://nuxt.com/docs/guide/concepts/typescript
   "files": [],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [
     {
-      "path": "./tsconfig.node.json"
+      "path": "./.nuxt/tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.app.json"
+      "path": "./.nuxt/tsconfig.server.json"
     },
     {
-      "path": "./tsconfig.vitest.json"
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
     }
   ],
+
   "compilerOptions": {
-    "module": "NodeNext",
     "baseUrl": ".",
+
     "paths": {
-      "@/*": ["./src/*"],
-      "@/UI/shadcn/components/*": ["./src/UI/shadcn/components/*"],
-      "@/UI/shadcn/composables/*": ["./src/UI/shadcn/composables/*"],
-      "@/UI/shadcn/lib/utils/*": ["./src/UI/shadcn/lib/utils/*"],
-      "@/UI/shadcn/components/ui/*": ["./src/UI/shadcn/components/ui/*"],
-      "@/UI/shadcn/lib/*": ["./src/UI/shadcn/lib/*"]
-    },
-    "composite": true
+      "@/ui/shadcn/*": ["./app/ui/shadcn/*"]
+    }
   }
 }
