@@ -8,7 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/ui/shadcn/components/ui/form'
 import { Input } from '@/ui/shadcn/components/ui/input'
 import { useAuthStore } from './store/authStore'
@@ -23,16 +23,16 @@ const formSchema = toTypedSchema(
     password: z
       .string()
       .min(8, 'Длина пароля минимум 8 символов')
-      .max(64, 'Длина пароля максимум 64 символа')
-  })
+      .max(64, 'Длина пароля максимум 64 символа'),
+  }),
 )
 
 const form = useForm({
   validationSchema: formSchema,
   initialValues: {
     email: '',
-    password: ''
-  }
+    password: '',
+  },
 })
 
 const handleSubmit = form.handleSubmit(async (values) => {
@@ -45,8 +45,8 @@ const handleSubmit = form.handleSubmit(async (values) => {
     nickName: 'qeqwedsdsQQQ!',
     tokens: {
       accessToken: '1122334',
-      refreshToken: '44556677'
-    }
+      refreshToken: '44556677',
+    },
   }
   console.log(values, user)
   setUser(user)
@@ -57,7 +57,7 @@ const handleSubmit = form.handleSubmit(async (values) => {
   <AuthCard
     title="Вход"
     btn-name="Войти"
-    @submitForm="handleSubmit"
+    @submit-form="handleSubmit"
   >
     <FormField
       v-slot="{ componentField }"

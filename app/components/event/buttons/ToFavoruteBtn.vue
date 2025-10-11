@@ -7,8 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <Button v-if="!status">В избранное</Button>
-  <Button v-else>Убрать из избранного</Button>
+  <Button v-if="!status">
+    В избранное
+  </Button>
+  <Button v-else>
+    Убрать из избранного
+  </Button>
 </template>
 
 <style scoped></style>

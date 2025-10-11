@@ -8,7 +8,8 @@ const events = ref<Event[]>([])
 onMounted(async () => {
   try {
     events.value = await GetEventList()
-  } catch (e) {
+  }
+  catch (e) {
     console.log(e)
   }
 })

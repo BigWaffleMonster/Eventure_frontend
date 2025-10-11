@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import WillGoBtn from "./buttons/WillGoBtn.vue";
-import ToFavoruteBtn from "./buttons/ToFavoruteBtn.vue";
-import { cn } from "@/ui/shadcn/lib/utils";
-import type { Event } from "./types/eventTypes";
+import WillGoBtn from './buttons/WillGoBtn.vue'
+import ToFavoruteBtn from './buttons/ToFavoruteBtn.vue'
+import { cn } from '@/ui/shadcn/lib/utils'
+import type { Event } from './types/eventTypes'
 import {
   Card,
   CardContent,
@@ -10,19 +10,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/ui/shadcn/components/ui/card";
+} from '@/ui/shadcn/components/ui/card'
 
-defineProps<{ data: Event }>();
+defineProps<{ data: Event }>()
 </script>
 
 <template>
   <Card :class="cn('w-[320px] h-[380px] gap-2 flex justify-between', $attrs.class ?? '')">
     <CardHeader>
-      <CardTitle class="text-center">{{ data.title }}</CardTitle>
-      <CardDescription class="border-b-2">{{ data.author }}</CardDescription>
+      <CardTitle class="text-center">
+        {{ data.title }}
+      </CardTitle>
+      <CardDescription class="border-b-2">
+        {{ data.author }}
+      </CardDescription>
       <div class="w-full flex justify-between items-center">
-        <CardDescription> {{ data.hashtag }} </CardDescription
-        ><CardDescription>
+        <CardDescription> {{ data.hashtag }} </CardDescription><CardDescription>
           {{ data.quantity.participants }} / {{ data.quantity.capacity }}
         </CardDescription>
       </div>
@@ -32,7 +35,9 @@ defineProps<{ data: Event }>();
     </CardContent>
     <div class="flex flex-col justify-between items-center h-[100px] w-full">
       <CardHeader class="w-full">
-        <CardDescription class="w-full border-t-2">Location: {{ data.location }}</CardDescription>
+        <CardDescription class="w-full border-t-2">
+          Location: {{ data.location }}
+        </CardDescription>
         <div class="w-full border-b-2 flex justify-between items-center">
           <CardDescription>{{ data.startDate }} </CardDescription>
           <CardDescription>

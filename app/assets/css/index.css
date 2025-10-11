@@ -62,6 +62,7 @@
   --letter-spacing: 0em;
   --spacing: 0.25rem;
   --tracking-normal: 0em;
+  --nav-height: 50px;
 }
 
 .dark {

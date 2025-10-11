@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { LabelProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
+import type { LabelProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 import { cn } from '@/ui/shadcn/lib/utils'
 import { Label } from '@/ui/shadcn/components/ui/label'
-import { useFormField } from "./useFormField"
+import { useFormField } from './useFormField'
 
-const props = defineProps<LabelProps & { class?: HTMLAttributes["class"] }>()
+const props = defineProps<LabelProps & { class?: HTMLAttributes['class'] }>()
 
 const { error, formItemId } = useFormField()
 </script>

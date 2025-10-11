@@ -2,7 +2,7 @@
 import { LoginForm } from '@/components/auth/index'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
 })
 </script>
 

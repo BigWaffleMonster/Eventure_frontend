@@ -5,7 +5,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/ui/shadcn/components/ui/form'
 import { Input } from '@/ui/shadcn/components/ui/input'
 import { Register } from './api/register'
@@ -23,12 +23,12 @@ const formSchema = toTypedSchema(
       repeatPassword: z
         .string()
         .min(8, 'Длина пароля минимум 8 символов')
-        .max(64, 'Длина пароля максимум 64 символа')
+        .max(64, 'Длина пароля максимум 64 символа'),
     })
-    .refine((data) => data.password === data.repeatPassword, {
+    .refine(data => data.password === data.repeatPassword, {
       message: 'Пароли не совпадают',
-      path: ['repeatPassword']
-    })
+      path: ['repeatPassword'],
+    }),
 )
 
 const form = useForm({
@@ -36,8 +36,8 @@ const form = useForm({
   initialValues: {
     email: '',
     password: '',
-    repeatPassword: ''
-  }
+    repeatPassword: '',
+  },
 })
 
 const handleSubmit = form.handleSubmit(async (values) => {

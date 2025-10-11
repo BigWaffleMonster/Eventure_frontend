@@ -10,7 +10,8 @@ export async function GetEventList() {
     const data = response?.data
 
     return data
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err)
   }
 }
@@ -26,7 +27,8 @@ export async function GetEvent(id: string) {
     const data = response?.data
 
     return data
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err)
   }
 }

@@ -6,7 +6,7 @@ export async function Login(email: string, password: string) {
   try {
     const response = await $http?.post('/login', {
       email,
-      password
+      password,
     })
 
     const data = response?.data
@@ -19,7 +19,8 @@ export async function Login(email: string, password: string) {
     localStorage.setItem('refresh', tokens.refreshToken)
 
     return data
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err)
   }
 }

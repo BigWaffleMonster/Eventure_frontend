@@ -3,7 +3,7 @@
 import EventCard from '~/components/event/EventCard.vue'
 
 definePageMeta({
-  layout: 'main'
+  layout: 'main',
 })
 
 const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget egestas ligula.
@@ -19,7 +19,7 @@ const Event = {
   hashtag: '#walk',
   quantity: {
     participants: 3,
-    capacity: 10
+    capacity: 10,
   },
   description: text,
   location: 'My home dude',
@@ -29,7 +29,7 @@ const Event = {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }) ?? '',
   endDate:
     new Date().toLocaleDateString('ru-RU', {
@@ -37,13 +37,14 @@ const Event = {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
-    }) ?? ''
+      minute: '2-digit',
+    }) ?? '',
 }
 </script>
 
 <template>
   <div>
+    <!-- !TODO remove all EcentCard mocks -->
     <EventCard :data="Event" />
   </div>
 </template>

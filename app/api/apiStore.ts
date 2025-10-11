@@ -17,6 +17,6 @@ export const useApiStore = defineStore('api', () => {
 
   return {
     // setAxios,
-    getAxios
+    getAxios,
   }
 })

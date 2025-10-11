@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>EventApp — События рядом с вами</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fa;
+        color: #333;
+      }
+
+      header {
+        background-color: #4a6cf7;
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .tagline {
+        text-align: center;
+        font-size: 1.8em;
+        margin: 30px 0;
+        color: #4a6cf7;
+      }
+
+      .section-title {
+        font-size: 1.4em;
+        margin: 30px 0 15px;
+        color: #333;
+        border-bottom: 2px solid #4a6cf7;
+        padding-bottom: 5px;
+      }
+
+      .create-event-prompt {
+        background-color: #e3f2fd;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 40px 0;
+      }
+
+      .view-all-events-btn {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        margin-top: 10px;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .create-event-btn {
+        background-color: #4a6cf7;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        margin-top: 10px;
+      }
+
+      .event-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .event-card h3 {
+        margin: 0 0 10px;
+      }
+
+      .event-card p {
+        margin: 5px 0;
+        color: #666;
+      }
+
+      .event-actions button {
+        margin-right: 10px;
+        padding: 5px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .btn-yes {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .btn-no {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .event-meta {
+        display: flex;
+        justify-content: space-between;
+        color: #888;
+        font-size: 0.9em;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">EventApp</div>
+      <nav>
+        <a href="#">Главная</a>
+        <a href="#">Мои события</a>
+        <a href="#">Профиль</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <!-- Краткое описание сайта -->
+      <div class="tagline">Создавайте и участвуйте в событиях</div>
+
+      <!-- Популярные события -->
+      <h2 class="section-title">Популярные события</h2>
+      <div class="event-card">
+        <h3>Велопрогулка по парку</h3>
+        <p>Дата: 12 июня 2025, 10:00</p>
+        <p>Место: Центральный парк</p>
+        <p>
+          Описание: Встречаемся у фонтана, едем кататься. Все уровни
+          приветствуются!
+        </p>
+        <div class="event-actions">
+          <button class="btn-yes">Пойду</button>
+          <button class="btn-no">Не пойду</button>
+        </div>
+        <div class="event-meta">
+          <span>Автор: Алексей</span>
+          <span>Откликнулись: 24 человека</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <h3>Ночь в музее</h3>
+        <p>Дата: 15 июня 2025, 20:00</p>
+        <p>Место: Музей искусств</p>
+        <p>Описание: Увлекательная экскурсия, квест и ужин в музее!</p>
+        <div class="event-actions">
+          <button class="btn-yes">Пойду</button>
+          <button class="btn-no">Не пойду</button>
+        </div>
+        <div class="event-meta">
+          <span>Автор: Мария</span>
+          <span>Откликнулись: 18 человек</span>
+        </div>
+      </div>
+
+      <!-- Последние события -->
+      <h2 class="section-title">Последние события</h2>
+      <div class="event-card">
+        <h3>Книжная ярмарка</h3>
+        <p>Дата: 18 июня 2025, 12:00</p>
+        <p>Место: Центральная библиотека</p>
+        <p>Описание: Встреча с авторами, автограф-сессии и скидки на книги.</p>
+        <div class="event-actions">
+          <button class="btn-yes">Пойду</button>
+          <button class="btn-no">Не пойду</button>
+        </div>
+        <div class="event-meta">
+          <span>Автор: Ирина</span>
+          <span>Откликнулись: 7 человек</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <h3>Кинопоказ на открытом воздухе</h3>
+        <p>Дата: 20 июня 2025, 21:00</p>
+        <p>Место: Сквер у фонтана</p>
+        <p>Описание: Фильм под открытым небом. Принесите плед!</p>
+        <div class="event-actions">
+          <button class="btn-yes">Пойду</button>
+          <button class="btn-no">Не пойду</button>
+        </div>
+        <div class="event-meta">
+          <span>Автор: Дмитрий</span>
+          <span>Откликнулись: 32 человека</span>
+        </div>
+      </div>
+
+      <!-- Ссылка на все события -->
+      <div class="create-event-prompt">
+        <h3>Не нашли интересующее событие?</h3>
+        <p>
+          Посмотрите все доступные события и найдите то, что подходит именно
+          вам.
+        </p>
+        <a href="#" class="view-all-events-btn">Посмотреть все события</a>
+      </div>
+
+      <!-- Призыв к созданию события -->
+      <div class="create-event-prompt">
+        <h3>Хочешь создать событие?</h3>
+        <p>
+          Поделись идеей — организуй встречу, мероприятие или активность, в
+          которой хотят принять участие другие.
+        </p>
+        <button class="create-event-btn">Создать событие</button>
+      </div>
+    </div>
+  </body>
+</html>

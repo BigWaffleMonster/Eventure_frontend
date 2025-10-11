@@ -5,7 +5,7 @@ const baseURL = 'http://127.0.0.1:8080/api/v1/'
 
 export const axios_instance = axios.create({
   baseURL,
-  timeout: 1000
+  timeout: 1000,
 })
 
 axios_instance.interceptors.request.use((config) => {
@@ -24,9 +24,9 @@ axios_instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     if (
-      error.response.status === 401 &&
-      error.config &&
-      !error.config?._isRetry
+      error.response.status === 401
+      && error.config
+      && !error.config?._isRetry
     ) {
       originalRequest._isRetry = true
       try {
@@ -35,7 +35,8 @@ axios_instance.interceptors.response.use(
         })
         localStorage.setItem('token', response.data.accessToken)
         return axios_instance.request(originalRequest)
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
         navigateTo('/auth/login')
         throw new Error('User not authorized')
@@ -43,5 +44,5 @@ axios_instance.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )

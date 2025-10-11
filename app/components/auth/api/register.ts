@@ -8,7 +8,7 @@ export async function Register(email: string, password: string) {
   try {
     const response = await $http?.post('/register', {
       email,
-      password
+      password,
     })
 
     const { error } = response?.data || null
@@ -17,8 +17,9 @@ export async function Register(email: string, password: string) {
     }
     navigateTo('/auth/login')
     // router.push('/auth/login')
-  } catch (err) {
-    //need to throw error
+  }
+  catch (err) {
+    // need to throw error
     console.log(err, 'AHAHAHAHAHA')
   }
 }

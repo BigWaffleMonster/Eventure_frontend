@@ -2,7 +2,7 @@
 import UserSettings from '@/components/user/UserSettings.vue'
 
 definePageMeta({
-  layout: 'main'
+  layout: 'main',
 })
 </script>
 
