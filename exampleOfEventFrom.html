@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Создать событие</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      body {
+        background: linear-gradient(120deg, #89c2d9, #61a5c2, #468faf, #317692);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 900px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1d3557, #457b9d);
+        color: white;
+        padding: 40px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .header p {
+        opacity: 0.9;
+        font-size: 18px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .form-container {
+        padding: 40px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #1d3557;
+        font-size: 16px;
+      }
+
+      .input-with-icon {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #457b9d;
+        font-size: 18px;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 15px 15px 15px 50px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s;
+        background: #f8f9fa;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #457b9d;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.1);
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+        padding: 15px;
+      }
+
+      .tag-input-container {
+        display: flex;
+        gap: 10px;
+      }
+
+      .tag-input-container input {
+        padding: 15px 15px 15px 50px;
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .tag {
+        background: linear-gradient(135deg, #457b9d, #1d3557);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        animation: tagAppear 0.3s ease-out;
+      }
+
+      @keyframes tagAppear {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .tag button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .image-preview {
+        margin-top: 15px;
+        text-align: center;
+        border: 2px dashed #457b9d;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s;
+      }
+
+      .image-preview.drag-over {
+        background: rgba(69, 123, 157, 0.1);
+        border-color: #1d3557;
+      }
+
+      .image-preview img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #e63946, #a85a63);
+        color: white;
+        border: none;
+        padding: 18px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s;
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .required {
+        color: #e63946;
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .category-option {
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: white;
+      }
+
+      .category-option:hover {
+        border-color: #457b9d;
+        background: #f8f9fa;
+      }
+
+      .category-option.selected {
+        border-color: #1d3557;
+        background: #1d3557;
+        color: white;
+      }
+
+      .footer-note {
+        text-align: center;
+        margin-top: 20px;
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header {
+          padding: 30px 20px;
+        }
+
+        .form-container {
+          padding: 30px 20px;
+        }
+
+        .category-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Создать новое событие</h1>
+        <p>Поделитесь интересным событием с сообществом</p>
+      </div>
+
+      <div class="form-container">
+        <form id="eventForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="title"
+                >Название события <span class="required">*</span></label
+              >
+              <div class="input-with-icon">
+                <span class="input-icon">🎉</span>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Как называется событие?"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="location"
+                >Место проведения <span class="required">*</span></label
+              >
+              <div class="input-with-icon">
+                <span class="input-icon">📍</span>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  placeholder="Адрес или онлайн"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="date"
+                >Дата и время <span class="required">*</span></label
+              >
+              <div class="input-with-icon">
+                <span class="input-icon">📅</span>
+                <input type="datetime-local" id="date" name="date" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="maxParticipants">Максимум участников</label>
+              <div class="input-with-icon">
+                <span class="input-icon">👥</span>
+                <input
+                  type="number"
+                  id="maxParticipants"
+                  name="maxParticipants"
+                  min="1"
+                  placeholder="Количество"
+                />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description"
+                >Описание события <span class="required">*</span></label
+              >
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Расскажите подробнее о событии, его целях и особенностях..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Категория <span class="required">*</span></label>
+              <div class="category-grid">
+                <div class="category-option" data-value="спорт">Спорт</div>
+                <div class="category-option" data-value="музыка">Музыка</div>
+                <div class="category-option" data-value="образование">
+                  Образование
+                </div>
+                <div class="category-option" data-value="технологии">
+                  Технологии
+                </div>
+                <div class="category-option" data-value="искусство">
+                  Искусство
+                </div>
+                <div class="category-option" data-value="еда">Еда</div>
+              </div>
+              <input type="hidden" id="category" name="category" required />
+            </div>
+
+            <div class="form-group full-width">
+              <label>Теги</label>
+              <div class="tag-input-container">
+                <div class="input-with-icon">
+                  <span class="input-icon">#</span>
+                  <input
+                    type="text"
+                    id="tagInput"
+                    placeholder="Добавьте теги (нажмите Enter)"
+                  />
+                </div>
+              </div>
+              <div class="tag-list" id="tagList"></div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="image">Изображение события</label>
+              <div class="image-preview" id="imagePreview">
+                <p>Перетащите изображение сюда или нажмите для выбора</p>
+              </div>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                style="display: none"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn">Опубликовать событие</button>
+          <p class="footer-note">
+            После публикации участники смогут записаться на ваше событие
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("eventForm")
+        const tagInput = document.getElementById("tagInput")
+        const tagList = document.getElementById("tagList")
+        const imageInput = document.getElementById("image")
+        const imagePreview = document.getElementById("imagePreview")
+        const categoryOptions = document.querySelectorAll(".category-option")
+        const categoryHidden = document.getElementById("category")
+
+        let tags = []
+        let selectedCategory = null
+
+        // Выбор категории
+        categoryOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            categoryOptions.forEach((opt) => opt.classList.remove("selected"))
+            this.classList.add("selected")
+            selectedCategory = this.getAttribute("data-value")
+            categoryHidden.value = selectedCategory
+          })
+        })
+
+        // Добавление тега по нажатию Enter
+        tagInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            addTag(this.value.trim())
+            this.value = ""
+          }
+        })
+
+        function addTag(tag) {
+          if (tag && !tags.includes(tag)) {
+            tags.push(tag)
+            renderTags()
+          }
+        }
+
+        function renderTags() {
+          tagList.innerHTML = ""
+          tags.forEach((tag, index) => {
+            const tagElement = document.createElement("div")
+            tagElement.className = "tag"
+            tagElement.innerHTML = `
+                        <span>${tag}</span>
+                        <button type="button" data-index="${index}">×</button>
+                    `
+            tagList.appendChild(tagElement)
+          })
+
+          // Добавляем обработчики для удаления тегов
+          document.querySelectorAll(".tag button").forEach((button) => {
+            button.addEventListener("click", function () {
+              const index = parseInt(this.getAttribute("data-index"))
+              tags.splice(index, 1)
+              renderTags()
+            })
+          })
+        }
+
+        // Работа с изображением
+        imagePreview.addEventListener("click", function () {
+          imageInput.click()
+        })
+
+        imageInput.addEventListener("change", function (e) {
+          const file = e.target.files[0]
+          if (file) {
+            previewImage(file)
+          }
+        })
+
+        // Перетаскивание изображения
+        imagePreview.addEventListener("dragover", function (e) {
+          e.preventDefault()
+          this.classList.add("drag-over")
+        })
+
+        imagePreview.addEventListener("dragleave", function () {
+          this.classList.remove("drag-over")
+        })
+
+        imagePreview.addEventListener("drop", function (e) {
+          e.preventDefault()
+          this.classList.remove("drag-over")
+
+          if (e.dataTransfer.files.length) {
+            const file = e.dataTransfer.files[0]
+            if (file.type.startsWith("image/")) {
+              previewImage(file)
+            }
+          }
+        })
+
+        function previewImage(file) {
+          const reader = new FileReader()
+          reader.onload = function (event) {
+            imagePreview.innerHTML = `<img src="${event.target.result}" alt="Предварительный просмотр">`
+          }
+          reader.readAsDataURL(file)
+        }
+
+        // Отправка формы
+        form.addEventListener("submit", function (e) {
+          e.preventDefault()
+
+          if (!selectedCategory) {
+            alert("Пожалуйста, выберите категорию")
+            return
+          }
+
+          const formData = new FormData(form)
+          const eventData = {
+            title: formData.get("title"),
+            description: formData.get("description"),
+            date: formData.get("date"),
+            location: formData.get("location"),
+            category: selectedCategory,
+            maxParticipants: formData.get("maxParticipants") || null,
+            tags: tags,
+            image: imageInput.files[0] ? imageInput.files[0].name : null,
+          }
+
+          console.log("Данные события:", eventData)
+
+          // Здесь можно отправить данные на сервер
+          alert("Событие успешно создано и опубликовано!")
+          form.reset()
+          tags = []
+          renderTags()
+          imagePreview.innerHTML =
+            "<p>Перетащите изображение сюда или нажмите для выбора</p>"
+          categoryOptions.forEach((opt) => opt.classList.remove("selected"))
+          selectedCategory = null
+          categoryHidden.value = ""
+        })
+      })
+    </script>
+  </body>
+</html>

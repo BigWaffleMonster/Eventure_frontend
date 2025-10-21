@@ -14,10 +14,13 @@ export default withNuxt([
       semi: 'off',
       'vue/html-self-closing': 'off',
       '@typescript-eslint/semi': 'off',
+
       'vue/singleline-html-element-content-newline': 'off',
       quotes: ['error', 'single'],
       '@stylistic/quote-props': ['error', 'as-needed'],
       '@stylistic/member-delimiter-style': 'off',
+      '@stylistic/brace-style': 'off',
+      '@stylistic/comma-dangle': 'off'
       'vue/max-attributes-per-line': 'off',
     },
   },

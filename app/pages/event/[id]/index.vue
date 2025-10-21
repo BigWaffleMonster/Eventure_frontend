@@ -6,6 +6,8 @@ definePageMeta({
   layout: 'main',
 })
 
+const route = useRoute()
+
 const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget egestas ligula.
       Quisque luctus nisi lectus, vel pellentesque ipsum luctus eget. Donec pharetra dolor vitae
       accumsan maximus. Duis scelerisque risus a magna tristique, vel dictum nisl varius. Ut
@@ -14,6 +16,7 @@ const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendis
       arcu sed augue tincidunt mattis nec vitae orci. Proin dapibus neque sit amet turpis laoreet,
       in sagittis lacus scelerisque.`
 const Event = {
+  id: route.params.id as string,
   title: 'Test title',
   author: 'John Doe',
   hashtag: '#walk',
