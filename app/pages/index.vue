@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Button } from '~/ui/shadcn/components/ui/button'
 
+// const data = useApi({ url: '', method: 'GET' })
+
+const { $axios } = useNuxtApp()
+console.log($axios, 'TEST')
 definePageMeta({
   layout: 'main',
 })

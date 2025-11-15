@@ -1,26 +1,32 @@
-import { useGlobalState } from '@/utils/globalState'
+interface LoginResponse {
+  accessToken: string
+  refreshToken: string
+}
+
+interface LoginData {
+  email: string
+  password: string
+}
 
 export async function Login(email: string, password: string) {
-  const { getAxios } = useGlobalState()
-  const $http = getAxios()
   try {
-    const response = await $http?.post('/login', {
-      email,
-      password,
+    const response = await useApi<LoginData, LoginResponse>({
+      method: 'POST',
+      url: '/login',
+      data: { email, password },
     })
 
     const data = response?.data
-    const { tokens } = data || {}
-    if (!tokens.accessToken || !tokens.refreshToken) {
+    const { accessToken, refreshToken } = data || {}
+    if (!accessToken || !refreshToken) {
       throw new Error('No tokens provided by backend')
     }
 
-    localStorage.setItem('token', tokens.accessToken)
-    localStorage.setItem('refresh', tokens.refreshToken)
+    sessionStorage.setItem('token', accessToken)
+    sessionStorage.setItem('refresh', refreshToken)
 
     return data
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err)
   }
 }

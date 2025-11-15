@@ -1,13 +1,8 @@
-import { useGlobalState } from '@/utils/globalState'
-
-const { getAxios } = useGlobalState()
-const $http = getAxios()
-
 export async function GetEventList(filters: null) {
   try {
     // !TODO filters
     console.log(filters)
-    const response = await $http?.get('/event')
+    const response = await useApi({ method: 'GET', url: '/event' })
 
     const data = response?.data
 
@@ -19,7 +14,9 @@ export async function GetEventList(filters: null) {
 
 export async function GetEvent(id: string) {
   try {
-    const response = await $http?.get('/event', {
+    const response = await useApi({
+      method: 'GET',
+      url: '/event',
       params: {
         id,
       },

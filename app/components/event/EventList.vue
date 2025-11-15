@@ -9,7 +9,7 @@ const events = ref<Event[]>([])
 
 async function GetEventList(filters: Filter) {
   // !TODO filters
-  console.log(filters)
+  // console.log(filters)
   const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget egestas ligula.
       Quisque luctus nisi lectus, vel pellentesque ipsum luctus eget. Donec pharetra dolor vitae
       accumsan maximus. Duis scelerisque risus a magna tristique, vel dictum nisl varius. Ut

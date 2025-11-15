@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     'shadcn-nuxt',
     '@pinia/nuxt',
+    '@vueuse/nuxt',
   ],
   components: [
     {
@@ -21,6 +22,17 @@ export default defineNuxtConfig({
   css: ['~/assets/css/index.css'],
   compatibilityDate: '2025-07-15',
   vite: { plugins: [tailwindcss()] },
+  plugins: [],
+
+  runtimeConfig: {
+    // Private environment variables (server-side only)
+    // These will be loaded from process.env at runtime
+    // apiSecret: '',
+    public: {
+      apiUrl: '',
+    },
+  },
+
   eslint: {
     config: {
       stylistic: true,

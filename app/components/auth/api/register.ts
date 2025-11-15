@@ -1,14 +1,18 @@
-import { useGlobalState } from '@/utils/globalState'
-// const router = useRouter()
+interface RegisterResponse {
+  error: string
+}
+
+interface RegisterData {
+  email: string
+  password: string
+}
 
 export async function Register(email: string, password: string) {
-  const { getAxios } = useGlobalState()
-  const $http = getAxios()
-
   try {
-    const response = await $http?.post('/register', {
-      email,
-      password,
+    const response = await useApi<RegisterData, RegisterResponse>({
+      method: 'POST',
+      url: '/login',
+      data: { email, password },
     })
 
     const { error } = response?.data || null
@@ -16,9 +20,7 @@ export async function Register(email: string, password: string) {
       throw new Error('Error on registering')
     }
     navigateTo('/auth/login')
-    // router.push('/auth/login')
-  }
-  catch (err) {
+  } catch (err) {
     // need to throw error
     console.log(err, 'AHAHAHAHAHA')
   }
