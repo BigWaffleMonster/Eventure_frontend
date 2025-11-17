@@ -6,16 +6,20 @@ export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig()
   const baseURL = runtimeConfig.public.apiUrl
 
+  const { accessTokenCookie, refreshTokenCookie } = useAuthCookies()
+
   const axios_instance = axios.create({
-    baseURL,
+    // baseURL,
+    baseURL: 'https://jsonplaceholder.typicode.com',
     timeout: 10000,
     // fetchOptions: {}
   })
 
+  // if (import.meta.client) {
   axios_instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    // const token = sessionStorage.getItem('token')
+    if (accessTokenCookie.value) {
+      config.headers.Authorization = `Bearer ${accessTokenCookie.value}`
     }
 
     return config
@@ -30,11 +34,17 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (error.response.status === 401 && originalRequest && !originalRequest[RetrySymbol]) {
         originalRequest[RetrySymbol] = true
         try {
-          const response = await axios_instance.get(`/refresh`)
+          const response = await axios_instance.post(`/refresh`, {
+            refreshToken: refreshTokenCookie.value,
+          })
 
-          const accessToken = response.data.accessToken
+          const newAccessToken = response.data.accessToken
+          const newRefreshToken = response.data.refreshToken
 
-          if (import.meta.client) localStorage.setItem('token', accessToken)
+          accessTokenCookie.value = newAccessToken
+          refreshTokenCookie.value = newRefreshToken
+
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
 
           return axios_instance.request(originalRequest)
         } catch (e) {
@@ -47,6 +57,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       return Promise.reject(error)
     }
   )
-
-  nuxtApp.provide('axios', axios_instance)
+  // }
+  // nuxtApp.provide('axios', axios_instance)
+  return {
+    provide: {
+      axios: axios_instance,
+    },
+  }
 })

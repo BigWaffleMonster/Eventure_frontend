@@ -24,7 +24,7 @@ const formSchema = toTypedSchema(
       .string()
       .min(8, 'Длина пароля минимум 8 символов')
       .max(64, 'Длина пароля максимум 64 символа'),
-  }),
+  })
 )
 
 const form = useForm({
@@ -54,15 +54,8 @@ const handleSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <AuthCard
-    title="Вход"
-    btn-name="Войти"
-    @submit-form="handleSubmit"
-  >
-    <FormField
-      v-slot="{ componentField }"
-      name="email"
-    >
+  <AuthCard title="Вход" btn-name="Войти" @submit-form="handleSubmit">
+    <FormField v-slot="{ componentField }" name="email">
       <FormItem class="w-full">
         <FormLabel>Email</FormLabel>
         <FormControl>
@@ -76,18 +69,11 @@ const handleSubmit = form.handleSubmit(async (values) => {
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField
-      v-slot="{ componentField }"
-      name="password"
-    >
+    <FormField v-slot="{ componentField }" name="password">
       <FormItem>
         <FormLabel>Пароль</FormLabel>
         <FormControl>
-          <Input
-            type="password"
-            v-bind="componentField"
-            class="border-(--color-border)"
-          />
+          <Input type="password" v-bind="componentField" class="border-(--color-border)" />
         </FormControl>
         <FormMessage />
       </FormItem>

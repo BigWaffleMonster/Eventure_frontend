@@ -2,7 +2,8 @@ export async function GetEventList(filters: null) {
   try {
     // !TODO filters
     console.log(filters)
-    const response = await useApi({ method: 'GET', url: '/event' })
+    const { $axios } = useNuxtApp()
+    const response = await $axios.get('/event')
 
     const data = response?.data
 
@@ -14,13 +15,8 @@ export async function GetEventList(filters: null) {
 
 export async function GetEvent(id: string) {
   try {
-    const response = await useApi({
-      method: 'GET',
-      url: '/event',
-      params: {
-        id,
-      },
-    })
+    const { $axios } = useNuxtApp()
+    const response = await $axios.get('/event', { params: { id } })
 
     const data = response?.data
 
