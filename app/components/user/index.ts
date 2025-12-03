@@ -1,3 +1,3 @@
-import UserProfile from './UserSettings.vue'
+import UserProfile from './UserPage.vue'
 
 export { UserProfile }

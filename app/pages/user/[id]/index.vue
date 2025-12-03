@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserSettings from '@/components/user/UserSettings.vue'
+import UserPage from '~/components/user/UserPage.vue'
 
 definePageMeta({
   layout: 'main',
@@ -7,5 +7,5 @@ definePageMeta({
 </script>
 
 <template>
-  <UserSettings />
+  <UserPage />
 </template>

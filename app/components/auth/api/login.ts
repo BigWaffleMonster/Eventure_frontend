@@ -1,18 +1,17 @@
-export async function Login(email: string, password: string) {
+import { useQuery, type UseQueryReturnType } from '@tanstack/vue-query'
+
+export function Login(email: string, password: string): UseQueryReturnType<any, Error> {
   const { $axios } = useNuxtApp()
 
-  const response = await $axios.post('/login', { email, password })
-
-  const data = response?.data
-  const { accessToken, refreshToken } = data || {}
-  if (!accessToken || !refreshToken) {
-    throw new Error('No tokens provided by backend')
+  const login = async () => {
+    const respo = await $axios.post('/login', { email, password })
+    return respo.data
   }
 
-  const { accessTokenCookie, refreshTokenCookie } = useAuthCookies()
+  const response = useQuery({
+    queryKey: ['login'],
+    queryFn: login,
+  })
 
-  accessTokenCookie.value = accessToken
-  refreshTokenCookie.value = refreshToken
-
-  return data
+  return response
 }

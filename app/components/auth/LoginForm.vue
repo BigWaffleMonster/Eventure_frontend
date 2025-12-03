@@ -17,6 +17,10 @@ import AuthCard from '@/ui/AuthCard.vue'
 
 const { setUser } = useAuthStore()
 
+// Query example
+// const { data, isPending, error, isError } = Login('qweqw', 'qweqeww')
+// console.log(data.value)
+
 const formSchema = toTypedSchema(
   z.object({
     email: z.string().email('Должно быть валидной почтой'),
