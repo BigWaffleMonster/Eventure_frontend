@@ -14,7 +14,7 @@ const modelValue = defineModel<LocationData | null>({
   default: null,
 })
 
-// 🔹 Состояние
+// 🔹 Состояние d
 const mapContainer = ref<HTMLElement | null>(null)
 const map = shallowRef<any>(null) // L.Map
 const marker = shallowRef<any>(null) // L.Marker
