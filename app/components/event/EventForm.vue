@@ -2,7 +2,27 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { Card } from '~/ui/shadcn/components/ui/card'
+
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/ui/shadcn/components/ui/card'
+import { Input } from '@/ui/shadcn/components/ui/input'
+import { Label } from '@/ui/shadcn/components/ui/label'
+import { Button } from '@/ui/shadcn/components/ui/button'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/ui/shadcn/components/ui/form'
+
+import { cn } from '@/ui/shadcn/lib/utils'
+import type { LocationData } from '../map/types'
 
 // import {
 //   FormControl,
@@ -15,17 +35,15 @@ import { Card } from '~/ui/shadcn/components/ui/card'
 
 const formSchema = toTypedSchema(
   z.object({
-    title: z.string().email('Должно быть валидной почтой'),
-    description: z
-      .string()
-      .min(8, 'Длина пароля минимум 8 символов')
-      .max(64, 'Длина пароля максимум 64 символа'),
-    cover: z.string(),
+    title: z.string().min(1, 'Длина должна быть больше 1').optional(),
+    description: z.string(),
+    // cover: z.string(),
     location: z.string(),
     hashtag: z.string(),
     dateStart: z.string(),
     dateEnd: z.string(),
     capacity: z.number(),
+    coverFilename: z.string().optional(), // e.g. "event.jpg"
   })
 )
 
@@ -36,43 +54,206 @@ const form = useForm({
     description: '',
     dateStart: '',
     dateEnd: '',
-    cover: '',
     location: '',
     hashtag: '',
     capacity: 0,
   },
 })
+
+const eventCover = useTemplateRef<HTMLInputElement>('event-cover')
+const coverSrc = ref<string | undefined>(undefined)
+const coverFile = ref<File | null>(null)
+
+const eventLocation = ref<LocationData | null>(null)
+
+// const formData = new FormData()
+// formData.append('title', form.values.title)
+// formData.append('description', form.values.description)
+// formData.append('cover', selectedFile.value, selectedFile.value.name)
+watch(coverFile, (newFile, oldFile) => {
+  if (coverSrc.value) {
+    URL.revokeObjectURL(coverSrc.value)
+    coverSrc.value = undefined
+  }
+  if (newFile) {
+    coverSrc.value = URL.createObjectURL(newFile)
+  }
+})
+
+async function selectCover() {
+  eventCover.value?.click()
+  const r = await form.validate()
+  console.log(r)
+}
+
+function coverChange(e: Event) {
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) {
+    coverSrc.value = URL.createObjectURL(file)
+
+    form.setValues({
+      ...form.values,
+      coverFilename: file.name,
+    })
+  }
+}
+
+onUnmounted(() => {
+  if (coverSrc.value) {
+    URL.revokeObjectURL(coverSrc.value)
+    coverSrc.value = undefined
+  }
+})
 </script>
 
 <template>
-  <Card class="w-full max-w-sm">
-    <!-- <CardHeader>
-      <CardTitle>Login to your account</CardTitle>
-      <CardDescription> Enter your email below to login to your account </CardDescription>
-      <CardAction>
-        <Button variant="link"> Sign Up </Button>
-      </CardAction>
-    </CardHeader> -->
+  <Card :class="cn('w-[380px]', $attrs.class ?? '')">
+    <CardHeader>
+      <CardTitle class="text-center"> Создать событие </CardTitle>
+    </CardHeader>
+
     <CardContent>
-      <form>
-        <div class="grid w-full items-center gap-4">
-          <div class="flex flex-col space-y-1.5">
-            <Label for="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" />
-          </div>
-          <div class="flex flex-col space-y-1.5">
-            <div class="flex items-center">
-              <Label for="password">Password</Label>
-              <a href="#" class="ml-auto inline-block text-sm underline"> Forgot your password? </a>
-            </div>
-            <Input id="password" type="password" />
-          </div>
-        </div>
+      <form ref="auth-form" class="w-full flex flex-col gap-4">
+        <!--  -->
+        <FormField v-slot="{ componentField }" name="title">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="hastag">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <!-- select instead of input -->
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="description">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="dateStart">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="dateEnd">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="capacity">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="location">
+          <FormItem class="w-full">
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="email@email"
+                v-bind="componentField"
+                class="border-(--color-border)"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="cover">
+          <FormItem class="w-full">
+            <FormLabel>Cover</FormLabel>
+            <FormControl>
+              <div class="p-2 border-1 rounded-md">
+                <!-- <Label for="cover">Picture</Label> -->
+                <img :src="coverSrc" alt="Нажмите чтобы загрузить..." @click="selectCover" />
+                <input
+                  id="cover"
+                  type="file"
+                  hidden="true"
+                  ref="event-cover"
+                  @change="coverChange"
+                />
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <!--  -->
       </form>
     </CardContent>
-    <CardFooter class="flex flex-col gap-2">
-      <Button class="w-full"> Login </Button>
-      <Button variant="outline" class="w-full"> Login with Google </Button>
+    <CardFooter class="">
+      <Button class="cursor-pointer w-full" @click="() => ''"> Создать </Button>
     </CardFooter>
+    <ClientOnly>
+      <LocationPicker
+        class="test"
+        v-model="eventLocation"
+        :initial-lat="55.7512"
+        :initial-lng="37.6184"
+      />
+    </ClientOnly>
   </Card>
 </template>
+
+<style lang="css" scoped>
+.test {
+  width: 600px;
+  height: 600px;
+}
+</style>
