@@ -3,47 +3,75 @@
 import { ref, shallowRef, onMounted, onUnmounted, watch } from 'vue'
 import type { LocationData } from './types'
 
-// 🔹 Типизация
-// 🔹 Props
-const props = defineProps<{
-  initialLat?: number
-  initialLng?: number
+interface NominatimSearchResult {
+  place_id: number
+  licence: string
+  osm_type: 'node' | 'way' | 'relation'
+  osm_id: number
+  boundingbox: [string, string, string, string] // [minLat, maxLat, minLon, maxLon]
+  lat: string // Nominatim возвращает координаты как строки!
+  lon: string
+  display_name: string
+  class: string
+  type: string
+  importance: number
+
+  // опционально — если используете addressdetails=1:
+  address?: {
+    road?: string
+    house_number?: string
+    city?: string
+    town?: string
+    village?: string
+    state?: string
+    postcode?: string
+    country?: string
+    country_code?: string
+  }
+}
+
+const {
+  editable = true,
+  initialLat,
+  initialLng,
+} = defineProps<{
+  initialLat?: number //define here with geo api. Need to get user location
+  initialLng?: number //define here with geo api. Need to get user location
+  editable?: boolean
 }>()
 
 const modelValue = defineModel<LocationData | null>({
   default: null,
 })
 
-// 🔹 Состояние d
 const mapContainer = ref<HTMLElement | null>(null)
-const map = shallowRef<any>(null) // L.Map
-const marker = shallowRef<any>(null) // L.Marker
+const map = shallowRef<any>(null)
+const marker = shallowRef<any>(null)
 const internalLocation = ref<LocationData | null>(null)
+
+const searchQuery = ref<string>('')
+const searchResults = ref<NominatimSearchResult[]>([])
 
 let L: typeof import('leaflet') | null = null
 
-// Обновление локации (с плавным flyTo)
 async function updateLocation(lat: number, lng: number, address?: string, shouldPan = true) {
   internalLocation.value = { lat, lng, address }
 
-  // Обновляем/создаём маркер
   if (marker.value) {
     marker.value.setLatLng([lat, lng])
   } else if (L && map.value) {
     marker.value = L.marker([lat, lng]).addTo(map.value)
   }
 
-  // Плавное перемещение карты
   if (shouldPan && map.value) {
     map.value.flyTo([lat, lng], map.value.getZoom(), {
       animate: true,
-      duration: 1.0, // 1 сек — плавно
-      easeLinearity: 0.25, // естественное ускорение/торможение
-      noMoveStart: true, // предотвращает зацикливание
+      duration: 1.0,
+      easeLinearity: 0.25,
+      noMoveStart: true,
     })
   }
 
-  // Reverse geocoding — только если адрес не задан
   if (!address) {
     try {
       const controller = new AbortController()
@@ -70,7 +98,38 @@ async function updateLocation(lat: number, lng: number, address?: string, should
   modelValue.value = { lat, lng, address }
 }
 
-// Инициализация карты
+async function searchAddress() {
+  if (!searchQuery.value.trim()) return
+
+  try {
+    const url = new URL('https://nominatim.openstreetmap.org/search')
+    url.searchParams.append('q', searchQuery.value)
+    url.searchParams.append('format', 'json')
+    url.searchParams.append('limit', '7')
+    url.searchParams.append('polygon_geojson', '0')
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        // 'User-Agent': 'MapSearchApp/0.1 (mailto:dev@example.com)', // Обязательно для Nominatim!
+      },
+    })
+
+    const data = await response.json()
+    searchResults.value = data
+
+    // Очистим предыдущие маркеры (если были)
+  } catch (error) {
+    console.error('Ошибка поиска:', error)
+  }
+}
+
+async function selectResult(result: NominatimSearchResult) {
+  const lat = parseFloat(result.lat)
+  const lon = parseFloat(result.lon)
+
+  await updateLocation(lat, lon)
+}
+
 onMounted(async () => {
   L = (await import('leaflet')).default
 
@@ -83,25 +142,28 @@ onMounted(async () => {
     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   })
 
-  // Создаём карту
-  map.value = L.map(mapContainer.value, {
-    attributionControl: false,
-    zoomControl: true,
-  }).setView([props.initialLat ?? 55.7512, props.initialLng ?? 37.6184], 13)
+  if (modelValue.value?.lat && modelValue.value?.lng) {
+    map.value = L.map(mapContainer.value, {
+      attributionControl: false,
+      zoomControl: true,
+    }).setView([modelValue.value.lat, modelValue.value?.lng], 13)
+  } else {
+    map.value = L.map(mapContainer.value, {
+      attributionControl: false,
+      zoomControl: true,
+    }).setView([initialLat ?? 55.7512, initialLng ?? 37.6184], 13)
+  }
 
-  // Тайлы OpenStreetMap
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map.value)
 
-  // Клик по карте
   map.value.on('click', (e: any) => {
     const { lat, lng } = e.latlng
     updateLocation(lat, lng)
   })
 
-  // Инициализация из modelValue
   if (modelValue.value) {
     let lat: number | undefined, lng: number | undefined, addr: string | undefined
 
@@ -123,17 +185,11 @@ onUnmounted(() => {
 })
 
 // 🔁 Отслеживаем внешние изменения (например, сброс формы)
-watch(modelValue, (newVal) => {
-  if (!newVal || !map.value) return
-
-  let lat: number | undefined, lng: number | undefined, addr: string | undefined
-
-  lat = newVal.lat
-  lng = newVal.lng
-  addr = newVal.address
-
-  if (lat !== undefined && lng !== undefined) {
-    updateLocation(lat, lng, addr, false)
+watch(modelValue, (newVal, oldVal) => {
+  if (newVal === null) {
+    marker.value.remove()
+    marker.value = null
+    internalLocation.value = null
   }
 })
 </script>
@@ -151,10 +207,26 @@ watch(modelValue, (newVal) => {
       </span>
     </div>
 
+    <div class="search-box">
+      <input
+        v-model="searchQuery"
+        @keyup.enter="searchAddress"
+        placeholder="Введите адрес..."
+        type="text"
+      />
+      <button @click="searchAddress">Найти</button>
+    </div>
+
+    <ul v-if="searchResults.length" class="results">
+      <li v-for="result in searchResults" :key="result.place_id" @click="selectResult(result)">
+        {{ result.display_name }}
+      </li>
+    </ul>
+
     <!-- Карта -->
     <div ref="mapContainer" class="w-full rounded border border-input" style="height: 400px" />
 
-    <p class="text-xs text-muted-foreground mt-1">
+    <p v-if="editable" class="text-xs text-muted-foreground mt-1">
       Кликните на карту, чтобы выбрать местоположение
     </p>
   </div>
@@ -164,7 +236,6 @@ watch(modelValue, (newVal) => {
 /* Обязательно: без scoped — иначе стили Leaflet не применятся */
 @import 'leaflet/dist/leaflet.css';
 
-/* Убедимся, что карта заполняет контейнер */
 :deep(.leaflet-container) {
   height: 100%;
   width: 100%;

@@ -64,7 +64,17 @@ const eventCover = useTemplateRef<HTMLInputElement>('event-cover')
 const coverSrc = ref<string | undefined>(undefined)
 const coverFile = ref<File | null>(null)
 
+// {
+//   lat: 55.750690087043814,
+//   lng: 31.6029396057129,
+//   address:
+//     'Д. Ф. Устинову, 19, улица Знаменка, 35, район Арба…ва, Центральный федеральный округ, 119019, Россия',
+// }
 const eventLocation = ref<LocationData | null>(null)
+
+const dropLocation = () => {
+  eventLocation.value = null
+}
 
 // const formData = new FormData()
 // formData.append('title', form.values.title)
@@ -97,6 +107,10 @@ function coverChange(e: Event) {
       coverFilename: file.name,
     })
   }
+}
+
+function createEvent() {
+  console.log(eventLocation.value)
 }
 
 onUnmounted(() => {
@@ -238,15 +252,11 @@ onUnmounted(() => {
       </form>
     </CardContent>
     <CardFooter class="">
-      <Button class="cursor-pointer w-full" @click="() => ''"> Создать </Button>
+      <Button class="cursor-pointer w-full" @click="createEvent"> Создать </Button>
+      <Button class="cursor-pointer w-full" @click="dropLocation"> Удалить локацию </Button>
     </CardFooter>
     <ClientOnly>
-      <LocationPicker
-        class="test"
-        v-model="eventLocation"
-        :initial-lat="55.7512"
-        :initial-lng="37.6184"
-      />
+      <LocationPicker class="test" v-model="eventLocation" />
     </ClientOnly>
   </Card>
 </template>
