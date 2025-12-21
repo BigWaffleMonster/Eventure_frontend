@@ -64,6 +64,10 @@ const eventCover = useTemplateRef<HTMLInputElement>('event-cover')
 const coverSrc = ref<string | undefined>(undefined)
 const coverFile = ref<File | null>(null)
 
+const { isPreview = false } = defineProps<{
+  isPreview?: boolean
+}>()
+
 // {
 //   lat: 55.750690087043814,
 //   lng: 31.6029396057129,
@@ -215,6 +219,18 @@ onUnmounted(() => {
             <FormMessage />
           </FormItem>
         </FormField>
+        <FormField v-slot="{ componentField }" name="cover">
+          <FormItem>
+            <FormLabel>Address</FormLabel>
+            <FormControl>
+              <div>
+                <!-- @result="selectAddress" -->
+                <AddressSearchBox :disabled="!isPreview" v-model="eventLocation" />
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
         <FormField v-slot="{ componentField }" name="location">
           <FormItem class="w-full">
             <FormLabel>Email</FormLabel>
@@ -248,6 +264,7 @@ onUnmounted(() => {
             <FormMessage />
           </FormItem>
         </FormField>
+
         <!--  -->
       </form>
     </CardContent>
