@@ -165,16 +165,7 @@ watch(modelValue, (newVal, oldVal) => {
 
 <template>
   <div class="space-y-2">
-    <!-- Выбранное место -->
-    <div v-if="modelValue" class="p-2 bg-muted rounded text-sm">
-      <span class="font-medium">📍 Выбрано:</span>
-      <span class="ml-1">
-        {{ modelValue?.address || `${modelValue.lat.toFixed(5)}, ${modelValue.lng.toFixed(5)}` }}
-      </span>
-    </div>
-
-    <!-- Карта -->
-    <div ref="mapContainer" class="w-full rounded border border-input" style="height: 400px" />
+    <div ref="mapContainer" class="w-full rounded border border-input z-0" style="height: 400px" />
 
     <p v-if="isPreview" class="text-xs text-muted-foreground mt-1">
       Кликните на карту, чтобы выбрать местоположение

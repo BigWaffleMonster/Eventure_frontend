@@ -21,10 +21,10 @@ async function GetEventList(filters: Filter) {
     id: String(Math.random()),
     title: 'Test title',
     author: 'John Doe',
-    hashtag: '#walk',
+    category: '#walk',
     quantity: {
       participants: 3,
-      capacity: 10,
+      maxCapacity: 10,
     },
     description: text,
     location: 'My home dude',

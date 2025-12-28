@@ -2,15 +2,22 @@ export type Event = {
   id: string
   title: string
   author: string
-  hashtag: string
+  category: string
+
   quantity: {
     participants: number
-    capacity: number
+    maxCapacity: number
+    minCapacity?: number
   }
+
   description: string
   location?: string
-  startDate?: string
-  endDate?: string
+
+  startDate: string
+  timeStart?: string
+
+  endDate: string
+  timeEnd?: string
 }
 
 export type Filter = {

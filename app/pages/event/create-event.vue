@@ -7,7 +7,7 @@ const Event = {
   id: '',
   title: 'Test title',
   author: 'John Doe',
-  hashtag: '#walk',
+  category: '#walk',
   quantity: {
     participants: 3,
     capacity: 10,
@@ -34,5 +34,7 @@ const Event = {
 </script>
 
 <template>
-  <EventForm />
+  <div class="flex justify-center content-center">
+    <EventForm />
+  </div>
 </template>

@@ -19,10 +19,10 @@ const Event = {
   id: route.params.id as string,
   title: 'Test title',
   author: 'John Doe',
-  hashtag: '#walk',
+  category: '#walk',
   quantity: {
     participants: 3,
-    capacity: 10,
+    maxCapacity: 10,
   },
   description: text,
   location: 'My home dude',

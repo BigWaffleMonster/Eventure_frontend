@@ -25,8 +25,9 @@ defineProps<{ data: Event }>()
         {{ data.author }}
       </CardDescription>
       <div class="w-full flex justify-between items-center">
-        <CardDescription> {{ data.hashtag }} </CardDescription><CardDescription>
-          {{ data.quantity.participants }} / {{ data.quantity.capacity }}
+        <CardDescription> {{ data.category }} </CardDescription
+        ><CardDescription>
+          {{ data.quantity.participants }} / {{ data.quantity.maxCapacity }}
         </CardDescription>
       </div>
     </CardHeader>
@@ -35,9 +36,7 @@ defineProps<{ data: Event }>()
     </CardContent>
     <div class="flex flex-col justify-between items-center h-[100px] w-full">
       <CardHeader class="w-full">
-        <CardDescription class="w-full border-t-2">
-          Location: {{ data.location }}
-        </CardDescription>
+        <CardDescription class="w-full border-t-2"> Location: {{ data.location }} </CardDescription>
         <div class="w-full border-b-2 flex justify-between items-center">
           <CardDescription>{{ data.startDate }} </CardDescription>
           <CardDescription>

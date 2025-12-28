@@ -229,7 +229,7 @@ function clearSearch() {
   margin: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
-  z-index: 50;
+  z-index: 1;
   display: block;
 }
 
