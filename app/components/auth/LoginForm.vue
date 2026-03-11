@@ -8,18 +8,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/ui/shadcn/components/ui/form'
 import { Input } from '@/ui/shadcn/components/ui/input'
 import { useAuthStore } from './store/authStore'
-import { Login } from './api/login'
+import { UseLogin } from './api/login'
 import AuthCard from '@/ui/AuthCard.vue'
 
 const { setUser } = useAuthStore()
-
-// Query example
-// const { data, isPending, error, isError } = Login('qweqw', 'qweqeww')
-// console.log(data.value)
 
 const formSchema = toTypedSchema(
   z.object({
@@ -27,7 +23,7 @@ const formSchema = toTypedSchema(
     password: z
       .string()
       .min(8, 'Длина пароля минимум 8 символов')
-      .max(64, 'Длина пароля максимум 64 символа'),
+      .max(64, 'Длина пароля максимум 64 символа')
   })
 )
 
@@ -35,31 +31,62 @@ const form = useForm({
   validationSchema: formSchema,
   initialValues: {
     email: '',
-    password: '',
-  },
+    password: ''
+  }
 })
 
-const handleSubmit = form.handleSubmit(async (values) => {
-  const data = await Login(values.email, values.password)
-  console.log(data)
+const { mutate: loginMutate, isPending, error, isError } = UseLogin()
 
-  const user = {
-    id: '1231231',
-    email: '123123@qweqwe.2',
-    nickName: 'qeqwedsdsQQQ!',
-    tokens: {
-      accessToken: '1122334',
-      refreshToken: '44556677',
-    },
+const handleSubmit = form.handleSubmit(async (values) => {
+  try {
+    loginMutate(
+      { email: values.email, password: values.password },
+      {
+        onSuccess: (data) => {
+          console.log(data)
+          const user = {
+            id: data.user_id,
+            email: data.email,
+            nickName: data.login,
+            tokens: {
+              accessToken: data.access_token,
+              refreshToken: data.refresh_token
+            }
+          }
+          setUser(user)
+        },
+        onError: (err) => {
+          console.error('Login failed:', err)
+        }
+      }
+    )
+
+    const user = {
+      id: '1231231',
+      email: '123123@qweqwe.2',
+      nickName: 'qeqwedsdsQQQ!',
+      tokens: {
+        accessToken: '1122334',
+        refreshToken: '44556677'
+      }
+    }
+    setUser(user)
+  } catch (e) {
+    console.log(e)
   }
-  console.log(values, user)
-  setUser(user)
 })
 </script>
 
 <template>
-  <AuthCard title="Вход" btn-name="Войти" @submit-form="handleSubmit">
-    <FormField v-slot="{ componentField }" name="email">
+  <AuthCard
+    title="Вход"
+    btn-name="Войти"
+    @submit-form="handleSubmit"
+  >
+    <FormField
+      v-slot="{ componentField }"
+      name="email"
+    >
       <FormItem class="w-full">
         <FormLabel>Email</FormLabel>
         <FormControl>
@@ -73,11 +100,18 @@ const handleSubmit = form.handleSubmit(async (values) => {
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ componentField }" name="password">
+    <FormField
+      v-slot="{ componentField }"
+      name="password"
+    >
       <FormItem>
         <FormLabel>Пароль</FormLabel>
         <FormControl>
-          <Input type="password" v-bind="componentField" class="border-(--color-border)" />
+          <Input
+            type="password"
+            v-bind="componentField"
+            class="border-(--color-border)"
+          />
         </FormControl>
         <FormMessage />
       </FormItem>

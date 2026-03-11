@@ -4,14 +4,14 @@ import { defineNuxtPlugin, navigateTo } from '#app'
 
 const RetrySymbol = Symbol('retry')
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const runtimeConfig = useRuntimeConfig()
   const baseURL = runtimeConfig.public.apiUrl
 
   const axios_instance = axios.create({
-    baseURL: 'https://jsonplaceholder.typicode.com',
+    baseURL,
     timeout: 10000,
-    withCredentials: true,
+    withCredentials: true
   })
 
   axios_instance.interceptors.response.use(
@@ -40,7 +40,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   return {
     provide: {
-      axios: axios_instance,
-    },
+      axios: axios_instance
+    }
   }
 })

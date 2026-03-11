@@ -84,11 +84,11 @@ const formSchema = toTypedSchema(
       {
         message: 'Укажите место проведения',
         path: ['location'],
-      }
+      },
     ),
 
     coverFilename: z.string().optional(), // e.g. "event.jpg"
-  })
+  }),
 )
 
 const form = useForm({
@@ -199,7 +199,7 @@ onUnmounted(() => {
 
 <template>
   <Card class="w-3xl">
-    <form @submit.prevent="createEvent" ref="auth-form" class="w-full flex flex-col gap-4">
+    <form ref="auth-form" class="w-full flex flex-col gap-4" @submit.prevent="createEvent">
       <CardHeader>
         <CardTitle class="text-center"> Создать событие </CardTitle>
       </CardHeader>
@@ -273,7 +273,7 @@ onUnmounted(() => {
                           :class="
                             cn(
                               'w-[160px] justify-between text-left font-normal flex-row-reverse',
-                              !value && 'text-muted-foreground'
+                              !value && 'text-muted-foreground',
                             )
                           "
                         >
@@ -284,15 +284,15 @@ onUnmounted(() => {
                       <PopoverContent class="w-auto p-0">
                         <Calendar
                           :model-value="value"
-                          @update:model-value="
-                            (d) => {
-                              handleChange(d), close()
-                            }
-                          "
                           :initial-focus="true"
                           :default-placeholder="defaultPlaceholder"
                           :min-value="today(getLocalTimeZone())"
                           layout="month-and-year"
+                          @update:model-value="
+                            (d) => {
+                              ;(handleChange(d), close())
+                            }
+                          "
                         />
                       </PopoverContent>
                     </Popover>
@@ -322,7 +322,7 @@ onUnmounted(() => {
                           :class="
                             cn(
                               'w-[160px] justify-between text-left font-normal flex-row-reverse',
-                              !value && 'text-muted-foreground'
+                              !value && 'text-muted-foreground',
                             )
                           "
                         >
@@ -333,15 +333,15 @@ onUnmounted(() => {
                       <PopoverContent class="w-auto p-0">
                         <Calendar
                           :model-value="value"
-                          @update:model-value="
-                            (d) => {
-                              handleChange(d), close()
-                            }
-                          "
                           :initial-focus="true"
                           :default-placeholder="defaultPlaceholder"
                           :min-value="minDateEnd"
                           layout="month-and-year"
+                          @update:model-value="
+                            (d) => {
+                              ;(handleChange(d), close())
+                            }
+                          "
                         />
                       </PopoverContent>
                     </Popover>
@@ -374,9 +374,9 @@ onUnmounted(() => {
           <div>
             <FormField v-slot="{ componentField }" name="maxCapacity">
               <FormItem class="w-full pb-3">
-                <FormLabel
-                  >Максимальное количество участников (0 - неограниченное количество )</FormLabel
-                >
+                <FormLabel>
+                  Максимальное количество участников (0 - неограниченное количество )
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -446,9 +446,9 @@ onUnmounted(() => {
                   <img :src="coverSrc" alt="Нажмите чтобы загрузить..." @click="selectCover" />
                   <input
                     id="cover"
+                    ref="event-cover"
                     type="file"
                     hidden="true"
-                    ref="event-cover"
                     @change="coverChange"
                   />
                 </div>

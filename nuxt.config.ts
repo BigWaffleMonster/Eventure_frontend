@@ -10,13 +10,13 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     'shadcn-nuxt',
     '@pinia/nuxt',
-    '@vueuse/nuxt',
+    '@vueuse/nuxt'
   ],
   components: [
     {
       path: '~/components',
-      pathPrefix: false,
-    },
+      pathPrefix: false
+    }
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/index.css'],
@@ -29,20 +29,20 @@ export default defineNuxtConfig({
     // These will be loaded from process.env at runtime
     // apiSecret: '',
     public: {
-      apiUrl: '',
-    },
+      apiUrl: ''
+    }
   },
 
   eslint: {
     config: {
-      stylistic: true,
-    },
+      stylistic: true
+    }
   },
   shadcn: {
     prefix: '',
-    componentDir: '~/ui/shadcn',
+    componentDir: '~/ui/shadcn'
   },
   veeValidate: {
-    autoImports: true,
-  },
+    autoImports: true
+  }
 })

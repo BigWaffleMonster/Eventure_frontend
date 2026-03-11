@@ -1,17 +1,16 @@
-import { useQuery, type UseQueryReturnType } from '@tanstack/vue-query'
+import { useMutation } from '@tanstack/vue-query'
 
-export function Login(email: string, password: string): UseQueryReturnType<any, Error> {
+export function UseLogin() {
   const { $axios } = useNuxtApp()
 
-  const login = async () => {
-    const respo = await $axios.post('/login', { email, password })
+  const login = async ({ email, password }: { email: string; password: string }) => {
+    console.log('TRYY!!!!!!!!')
+    const respo = await $axios.post('/auth/sign-in', { login: email, password })
     return respo.data
   }
 
-  const response = useQuery({
-    queryKey: ['login'],
-    queryFn: login,
+  return useMutation({
+    mutationKey: ['login'],
+    mutationFn: login
   })
-
-  return response
 }
