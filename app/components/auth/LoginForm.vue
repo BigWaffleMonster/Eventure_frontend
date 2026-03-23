@@ -35,7 +35,7 @@ const form = useForm({
   }
 })
 
-const { mutate: loginMutate, isPending, error, isError } = UseLogin()
+const { mutate: loginMutate } = UseLogin()
 
 const handleSubmit = form.handleSubmit(async (values) => {
   try {
@@ -54,23 +54,14 @@ const handleSubmit = form.handleSubmit(async (values) => {
             }
           }
           setUser(user)
+
+          navigateTo('/')
         },
         onError: (err) => {
           console.error('Login failed:', err)
         }
       }
     )
-
-    const user = {
-      id: '1231231',
-      email: '123123@qweqwe.2',
-      nickName: 'qeqwedsdsQQQ!',
-      tokens: {
-        accessToken: '1122334',
-        refreshToken: '44556677'
-      }
-    }
-    setUser(user)
   } catch (e) {
     console.log(e)
   }

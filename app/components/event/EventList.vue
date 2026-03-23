@@ -20,12 +20,10 @@ async function GetEventList(filters: Filter) {
   const Event = {
     id: String(Math.random()),
     title: 'Test title',
-    author: 'John Doe',
-    category: '#walk',
-    quantity: {
-      participants: 3,
-      maxCapacity: 10,
-    },
+    Owner: { email: 'John Doe' },
+    Category: { title: '#walk' },
+    capacity: 3,
+    max_capacity: 10,
     description: text,
     location: 'My home dude',
     startDate:
@@ -34,7 +32,7 @@ async function GetEventList(filters: Filter) {
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
-        minute: '2-digit',
+        minute: '2-digit'
       }) ?? '',
     endDate:
       new Date().toLocaleDateString('ru-RU', {
@@ -42,8 +40,8 @@ async function GetEventList(filters: Filter) {
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
-        minute: '2-digit',
-      }) ?? '',
+        minute: '2-digit'
+      }) ?? ''
   }
 
   return [Event, Event, Event]
@@ -62,7 +60,11 @@ onMounted(async () => {
   <div
     class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-items-center"
   >
-    <EventCard v-for="e in events" :key="e.id" :data="e" />
+    <EventCard
+      v-for="e in events"
+      :key="e.id"
+      :data="e"
+    />
   </div>
 </template>
 

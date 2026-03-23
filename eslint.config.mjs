@@ -3,11 +3,7 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt([
   {
-    files: ['app/ui/shadcn/components/ui/**/*'],
-    rules: {
-      // disable the rule for these files
-      'vue/multi-word-component-names': 'off',
-    },
+    ignores: ['app/ui/shadcn/components/ui/**/*']
   },
   {
     rules: {
@@ -21,9 +17,12 @@ export default withNuxt([
       '@stylistic/member-delimiter-style': 'off',
       '@stylistic/brace-style': 'off',
       '@stylistic/comma-dangle': 'off',
+      '@stylistic/operator-linebreak': 'off',
+      '@stylistic/arrow-parens': 'off',
       'vue/max-attributes-per-line': 'off',
-    },
-  },
+      'vue/comma-dangle': 'off'
+    }
+  }
 ])
 
 // Your custom configs here

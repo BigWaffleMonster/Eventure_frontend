@@ -9,8 +9,8 @@ export const useAuthStore = defineStore('auth', () => {
     nickName: null,
     tokens: {
       accessToken: null,
-      refreshToken: null,
-    },
+      refreshToken: null
+    }
   })
   function setUser(data: authType) {
     user.value = data

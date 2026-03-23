@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/ui/shadcn/components/ui/card'
 
 defineProps<{ data: Event }>()
@@ -22,13 +22,11 @@ defineProps<{ data: Event }>()
         {{ data.title }}
       </CardTitle>
       <CardDescription class="border-b-2">
-        {{ data.author }}
+        {{ data.Owner.email }}
       </CardDescription>
       <div class="w-full flex justify-between items-center">
-        <CardDescription> {{ data.category }} </CardDescription
-        ><CardDescription>
-          {{ data.quantity.participants }} / {{ data.quantity.maxCapacity }}
-        </CardDescription>
+        <CardDescription> {{ data.Category.title }} </CardDescription>
+        <CardDescription> {{ data.capacity }} / {{ data.max_capacity }} </CardDescription>
       </div>
     </CardHeader>
     <CardContent class="w-full h-fit leading-[23px] content">
@@ -38,9 +36,9 @@ defineProps<{ data: Event }>()
       <CardHeader class="w-full">
         <CardDescription class="w-full border-t-2"> Location: {{ data.location }} </CardDescription>
         <div class="w-full border-b-2 flex justify-between items-center">
-          <CardDescription>{{ data.startDate }} </CardDescription>
+          <CardDescription>{{ data.start_date }} </CardDescription>
           <CardDescription>
-            {{ data.endDate }}
+            {{ data.end_date }}
           </CardDescription>
         </div>
       </CardHeader>

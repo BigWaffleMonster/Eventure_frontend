@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { Login } from '~/components/auth/api/login'
 import { Button } from '~/ui/shadcn/components/ui/button'
 
 definePageMeta({
-  layout: 'main',
+  layout: 'main'
 })
 </script>
 

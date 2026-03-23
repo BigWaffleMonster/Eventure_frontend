@@ -1,85 +1,146 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
+import { Input } from '@/ui/shadcn/components/ui/input' // 👈 импорт shadcn Input
 
 const props = defineProps<{
   modelValue?: string
+  initValue?: string
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 
-const hourEl = useTemplateRef<HTMLInputElement>('hourEl')
-const minuteEl = useTemplateRef<HTMLInputElement>('minuteEl')
+const minuteEl = useTemplateRef<InstanceType<typeof Input>>('minuteEl')
 
 const hour = ref('')
 const minute = ref('')
 
-// Инициализация
-if (props.modelValue && /^\d{1,2}:\d{1,2}$/.test(props.modelValue)) {
-  const [h, m] = props.modelValue.split(':')
-  hour.value = h
-  minute.value = m
+watch(
+  () => [props.modelValue, props.initValue] as const,
+  ([modelVal, initVal]) => {
+    const valueToUse = modelVal || initVal
+    if (valueToUse && /^\d{1,2}:\d{1,2}$/.test(valueToUse)) {
+      const [h, m] = valueToUse.split(':')
+      if (h && m) {
+        hour.value = h
+        minute.value = m
+      }
+    }
+  },
+  { immediate: true }
+)
+
+const timeToMinutes = (time: string): number => {
+  if (!/^\d{1,2}:\d{1,2}$/.test(time)) return -1
+  const [h, m] = time.split(':').map(Number)
+  return (h || 0) * 60 + (m || 0)
 }
 
-const handleBlur = () => {
-  let h = Math.min(23, Math.max(0, parseInt(hour.value) || 0))
-  let m = Math.min(59, Math.max(0, parseInt(minute.value) || 0))
-  const result = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-  emit('update:modelValue', result)
-  hour.value = String(h).padStart(2, '0')
-  minute.value = String(m).padStart(2, '0')
+const clampHour = (value: string): number => {
+  return Math.min(23, Math.max(0, parseInt(value) || 0))
+}
+
+const clampMinute = (value: string): number => {
+  return Math.min(59, Math.max(0, parseInt(value) || 0))
 }
 
 const handleHourInput = (e: Event) => {
-  console.log(hour.value)
-  if (hour.value.length === 2) {
-    console.log(hour.value)
-    hour.value = ''
-    // el.value = ''
-  }
   const el = e.target as HTMLInputElement
+  let value = el.value.replace(/\D/g, '').slice(0, 2)
 
-  console.log(el, 'asdasd')
-  el.value = el.value.replace(/\D/g, '').slice(0, 2)
-  hour.value = el.value
-  if (el.value.length === 2) {
-    minuteEl.value?.focus()
+  if (value.length === 2 && parseInt(value) > 23) {
+    value = '23'
+  }
+
+  el.value = value
+  hour.value = value
+
+  if (value.length === 2) {
+    minuteEl.value?.$el?.focus()
+  }
+}
+
+const applyMinTimeConstraint = (h: string, m: string): { hour: string; minute: string } => {
+  if (!props.initValue || !/^\d{1,2}:\d{1,2}$/.test(props.initValue)) {
+    return {
+      hour: String(clampHour(h)).padStart(2, '0'),
+      minute: String(clampMinute(m)).padStart(2, '0')
+    }
+  }
+
+  const currentTotal = clampHour(h) * 60 + clampMinute(m)
+  const initTotal = timeToMinutes(props.initValue)
+
+  if (initTotal !== -1 && currentTotal <= initTotal) {
+    const [initH, initM] = props.initValue.split(':')
+    const t = Number(initM) + 1
+    return {
+      hour: String(initH).padStart(2, '0'),
+      minute: String(t).padStart(2, '0')
+    }
+  }
+
+  return {
+    hour: String(clampHour(h)).padStart(2, '0'),
+    minute: String(clampMinute(m)).padStart(2, '0')
   }
 }
 
 const handleMinuteInput = (e: Event) => {
   const el = e.target as HTMLInputElement
-  el.value = el.value.replace(/\D/g, '').slice(0, 2)
-  minute.value = el.value
+  let value = el.value.replace(/\D/g, '').slice(0, 2)
+
+  if (value.length === 2 && parseInt(value) > 59) {
+    value = '59'
+  }
+
+  el.value = value
+  minute.value = value
+}
+
+const handleHourBlur = () => {
+  if (hour.value) {
+    const h = clampHour(hour.value)
+    hour.value = String(h).padStart(2, '0')
+  }
+
+  const m = minute.value ? String(clampMinute(minute.value)).padStart(2, '0') : ''
+  emit('update:modelValue', `${hour.value}:${m}`)
+}
+
+const handleMinuteBlur = () => {
+  const constrained = applyMinTimeConstraint(hour.value, minute.value)
+  hour.value = constrained.hour
+  minute.value = constrained.minute
+  emit('update:modelValue', `${constrained.hour}:${constrained.minute}`)
 }
 </script>
 
 <template>
   <div class="flex items-center gap-1">
-    <!-- ⚠️ Нативный input, но со стилями ShadCN -->
-    <input
+    <Input
       ref="hourEl"
+      class="w-12 text-center font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-(--color-border)"
       type="text"
+      placeholder="00"
       inputmode="numeric"
       maxlength="2"
       :value="hour"
       @input="handleHourInput"
-      @blur="handleBlur"
-      placeholder="00"
-      class="flex h-9 w-12 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-center font-mono"
+      @blur="handleHourBlur"
     />
     <span class="text-muted-foreground">:</span>
-    <input
+    <Input
       ref="minuteEl"
+      class="w-12 text-center font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-(--color-border)"
       type="text"
+      placeholder="00"
       inputmode="numeric"
       maxlength="2"
       :value="minute"
       @input="handleMinuteInput"
-      @blur="handleBlur"
-      placeholder="00"
-      class="flex h-9 w-12 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-center font-mono"
+      @blur="handleMinuteBlur"
     />
   </div>
 </template>

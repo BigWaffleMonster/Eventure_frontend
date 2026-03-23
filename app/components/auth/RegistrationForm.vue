@@ -5,11 +5,10 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/ui/shadcn/components/ui/form'
 import { Input } from '@/ui/shadcn/components/ui/input'
 import { Register } from './api/register'
-
 import { z } from 'zod'
 
 const formSchema = toTypedSchema(
@@ -23,12 +22,12 @@ const formSchema = toTypedSchema(
       repeatPassword: z
         .string()
         .min(8, 'Длина пароля минимум 8 символов')
-        .max(64, 'Длина пароля максимум 64 символа'),
+        .max(64, 'Длина пароля максимум 64 символа')
     })
-    .refine(data => data.password === data.repeatPassword, {
+    .refine((data) => data.password === data.repeatPassword, {
       message: 'Пароли не совпадают',
-      path: ['repeatPassword'],
-    }),
+      path: ['repeatPassword']
+    })
 )
 
 const form = useForm({
@@ -36,16 +35,21 @@ const form = useForm({
   initialValues: {
     email: '',
     password: '',
-    repeatPassword: '',
-  },
+    repeatPassword: ''
+  }
 })
 
 const handleSubmit = form.handleSubmit(async (values) => {
-  console.log(values)
-  await Register(values.email, values.password)
+  try {
+    console.log(values)
+    await Register(values.email, values.password)
+  } catch (e) {
+    console.log(e)
+  }
 })
 </script>
 
+<!-- TODO Add Login field -->
 <template>
   <AuthCard
     title="Регистрация"

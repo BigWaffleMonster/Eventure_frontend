@@ -4,13 +4,24 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/ui/shadcn/components/ui/card'
 import { cn } from '@/ui/shadcn/lib/utils'
 import { Button } from '@/ui/shadcn/components/ui/button'
 
-defineProps<{ title: string, btnName: string }>()
-defineEmits(['submit-form'])
+defineProps<{ title: string; btnName: string }>()
+const emit = defineEmits(['submit-form'])
+const submitBtn = useTemplateRef('submit-btn')
+
+const handleSubmit = (event: Event) => {
+  event.preventDefault()
+  emit('submit-form')
+}
+
+const clickSubmit = () => {
+  console.log(submitBtn.value, 'EEEOEOE')
+  submitBtn.value!.click()
+}
 </script>
 
 <template>
@@ -25,14 +36,21 @@ defineEmits(['submit-form'])
       <form
         ref="auth-form"
         class="w-full flex flex-col gap-4"
+        @submit.prevent="handleSubmit"
       >
         <slot />
+        <button
+          v-show="false"
+          ref="submit-btn"
+          type="submit"
+          @click="handleSubmit"
+        />
       </form>
     </CardContent>
     <CardFooter class="">
       <Button
         class="cursor-pointer w-full"
-        @click="() => $emit('submit-form')"
+        @click="clickSubmit"
       >
         {{ btnName }}
       </Button>

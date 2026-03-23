@@ -6,11 +6,11 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/ui/shadcn/components/ui/select'
 import type { AcceptableValue } from 'reka-ui'
 
-const props = defineProps<{
+defineProps<{
   modelValue?: string
 
   items: { value: string; name: string }[]
@@ -36,7 +36,13 @@ const setItem = (d: AcceptableValue) => {
     <SelectContent>
       <SelectGroup>
         <SelectLabel>{{ label }}</SelectLabel>
-        <SelectItem v-for="v in items" :value="v.value" :key="v.value">{{ v.name }}</SelectItem>
+        <SelectItem
+          v-for="v in items"
+          :key="v.value"
+          :value="v.value"
+        >
+          {{ v.name }}
+        </SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>

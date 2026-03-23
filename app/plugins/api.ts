@@ -21,7 +21,12 @@ export default defineNuxtPlugin(() => {
     async (error) => {
       const originalRequest = error.config
 
-      if (error.response?.status === 401 && originalRequest && !originalRequest[RetrySymbol]) {
+      if (
+        error.response?.status === 401 &&
+        originalRequest &&
+        !originalRequest.url.includes('sign-in') &&
+        !originalRequest[RetrySymbol]
+      ) {
         originalRequest[RetrySymbol] = true
 
         try {
