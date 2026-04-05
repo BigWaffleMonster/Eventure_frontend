@@ -20,7 +20,10 @@ export default withNuxt([
       '@stylistic/operator-linebreak': 'off',
       '@stylistic/arrow-parens': 'off',
       'vue/max-attributes-per-line': 'off',
-      'vue/comma-dangle': 'off'
+      'vue/comma-dangle': 'off',
+      'nuxt/nuxt-config-keys-order': 'off',
+      'vue/attribute-hyphenation': 'off',
+      'vue/v-on-event-hyphenation': 'off'
     }
   }
 ])

@@ -9,7 +9,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/ui/shadcn/components/ui/card'
 import { Input } from '@/ui/shadcn/components/ui/input'
 import { Textarea } from '@/ui/shadcn/components/ui/textarea'
@@ -21,7 +21,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/ui/shadcn/components/ui/form'
 
 import type { LocationData } from '../map/types'
@@ -31,7 +31,7 @@ import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import { cn } from '@/ui/shadcn/lib/utils'
 import { CalendarIcon, X } from 'lucide-vue-next'
 import ItemSelect from '~/ui/ItemSelect.vue'
-import { UseCreateEvent } from './api/event'
+import { UseCreateEvent } from './api/eventAPI'
 import TimePicker from '~/ui/TimePicker.vue'
 
 const { mutate: createEventMutate } = UseCreateEvent()
@@ -47,7 +47,7 @@ const locationSchema = z.object({
   lat: z.number(),
   lng: z.number(),
   place_id: z.number(),
-  address: z.string().optional()
+  address: z.string().optional(),
 }) satisfies z.ZodType<LocationData>
 
 const formSchema = toTypedSchema(
@@ -80,29 +80,29 @@ const formSchema = toTypedSchema(
       },
       {
         message: 'Укажите место проведения',
-        path: ['location']
-      }
+        path: ['location'],
+      },
     ),
 
-    coverFilename: z.string().optional()
-  })
+    coverFilename: z.string().optional(),
+  }),
 )
 
 const form = useForm({
   validationSchema: formSchema,
   initialValues: {
-    maxCapacity: 0
-  }
+    maxCapacity: 0,
+  },
 })
 
 const items = [
   {
     value: '50691118-8eb2-4bea-a625-5bc6b867fea7',
-    name: 'test'
+    name: 'test',
   },
 
   { value: 'B', name: 'b' },
-  { value: 'C', name: 'c' }
+  { value: 'C', name: 'c' },
 ]
 
 const eventCover = useTemplateRef<HTMLInputElement>('event-cover')
@@ -254,7 +254,7 @@ const createEvent = form.handleSubmit(async (values) => {
 
   const formData = new FormData()
 
-  const appendNested = (data: any, prefix = '') => {
+  const appendNested = (data: object, prefix = '') => {
     Object.entries(data).forEach(([key, value]) => {
       if (value === null || value === undefined) return
 
@@ -286,10 +286,8 @@ const createEvent = form.handleSubmit(async (values) => {
     },
     onError: (error) => {
       console.error('❌ Ошибка:', error)
-      if (error.response?.data?.message) {
-        alert(error.response.data.message)
-      }
-    }
+      alert(error.message)
+    },
   })
 })
 
@@ -303,11 +301,7 @@ onUnmounted(() => {
 
 <template>
   <Card class="w-3xl">
-    <form
-      ref="auth-form"
-      class="w-full flex flex-col gap-4"
-      @submit.prevent="createEvent"
-    >
+    <form ref="auth-form" class="w-full flex flex-col gap-4" @submit.prevent="createEvent">
       <CardHeader>
         <CardTitle class="text-center"> Создать событие </CardTitle>
       </CardHeader>
@@ -318,10 +312,7 @@ onUnmounted(() => {
           <Separator class="my-3" />
 
           <div>
-            <FormField
-              v-slot="{ componentField }"
-              name="title"
-            >
+            <FormField v-slot="{ componentField }" name="title">
               <FormItem class="w-full pb-3">
                 <FormLabel>Название события*</FormLabel>
                 <FormControl>
@@ -334,10 +325,7 @@ onUnmounted(() => {
                 </FormControl>
               </FormItem>
             </FormField>
-            <FormField
-              v-slot="{ componentField }"
-              name="category"
-            >
+            <FormField v-slot="{ componentField }" name="category">
               <FormItem class="w-full pb-3">
                 <FormLabel>Категория*</FormLabel>
                 <FormControl>
@@ -351,10 +339,7 @@ onUnmounted(() => {
                 </FormControl>
               </FormItem>
             </FormField>
-            <FormField
-              v-slot="{ componentField }"
-              name="description"
-            >
+            <FormField v-slot="{ componentField }" name="description">
               <FormItem class="w-full pb-3">
                 <FormLabel>Описание события*</FormLabel>
                 <FormControl>
@@ -377,10 +362,7 @@ onUnmounted(() => {
 
           <div class="flex justify-between items-center">
             <div class="flex justify-between items-center gap-4">
-              <FormField
-                v-slot="{ value, handleChange }"
-                name="startDate"
-              >
+              <FormField v-slot="{ value, handleChange }" name="startDate">
                 <FormItem class="pb-3">
                   <FormLabel>Дата начала*</FormLabel>
                   <FormControl>
@@ -391,7 +373,7 @@ onUnmounted(() => {
                           :class="
                             cn(
                               'w-[160px] justify-between text-left font-normal flex-row-reverse',
-                              !value && 'text-muted-foreground'
+                              !value && 'text-muted-foreground',
                             )
                           "
                         >
@@ -417,10 +399,7 @@ onUnmounted(() => {
                   </FormControl>
                 </FormItem>
               </FormField>
-              <FormField
-                v-slot="{ componentField }"
-                name="timeStart"
-              >
+              <FormField v-slot="{ componentField }" name="timeStart">
                 <FormItem class="pb-3">
                   <FormLabel>Время начала*</FormLabel>
                   <FormControl>
@@ -433,10 +412,7 @@ onUnmounted(() => {
               </FormField>
             </div>
             <div class="flex justify-between items-center gap-4">
-              <FormField
-                v-slot="{ value, handleChange }"
-                name="endDate"
-              >
+              <FormField v-slot="{ value, handleChange }" name="endDate">
                 <FormItem class="pb-3">
                   <FormLabel>Дата конца*</FormLabel>
                   <FormControl>
@@ -447,7 +423,7 @@ onUnmounted(() => {
                           :class="
                             cn(
                               'w-[160px] justify-between text-left font-normal flex-row-reverse',
-                              !value && 'text-muted-foreground'
+                              !value && 'text-muted-foreground',
                             )
                           "
                         >
@@ -473,10 +449,7 @@ onUnmounted(() => {
                   </FormControl>
                 </FormItem>
               </FormField>
-              <FormField
-                v-slot="{ componentField }"
-                name="timeEnd"
-              >
+              <FormField v-slot="{ componentField }" name="timeEnd">
                 <FormItem class="pb-3">
                   <FormLabel>Время конца*</FormLabel>
                   <FormControl>
@@ -496,10 +469,7 @@ onUnmounted(() => {
           <Separator class="my-3" />
 
           <div>
-            <FormField
-              v-slot="{ componentField }"
-              name="maxCapacity"
-            >
+            <FormField v-slot="{ componentField }" name="maxCapacity">
               <FormItem class="w-full pb-3">
                 <FormLabel>
                   Максимальное количество участников (0 - неограниченное количество)
@@ -522,10 +492,7 @@ onUnmounted(() => {
           <Separator class="my-3" />
 
           <div>
-            <FormField
-              v-slot="{ value, handleChange }"
-              name="location"
-            >
+            <FormField v-slot="{ value, handleChange }" name="location">
               <FormItem class="w-full pb-3">
                 <FormLabel>Адрес*</FormLabel>
                 <FormControl>
@@ -599,11 +566,7 @@ onUnmounted(() => {
         </div>
       </CardContent>
       <CardFooter class="">
-        <Button
-          aria-label="Submit"
-          class="cursor-pointer w-full"
-          as-child
-        >
+        <Button aria-label="Submit" class="cursor-pointer w-full" as-child>
           <button type="submit">Сoздать</button>
         </Button>
       </CardFooter>

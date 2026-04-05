@@ -6,12 +6,12 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/icon',
-    '@vueuse/nuxt',
     '@vee-validate/nuxt',
     'shadcn-nuxt',
     '@pinia/nuxt',
     '@vueuse/nuxt'
   ],
+  plugins: [],
   components: [
     {
       path: '~/components',
@@ -22,7 +22,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/index.css'],
   compatibilityDate: '2025-07-15',
   vite: { plugins: [tailwindcss()] },
-  plugins: [],
 
   runtimeConfig: {
     // Private environment variables (server-side only)

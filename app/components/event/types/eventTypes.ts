@@ -28,6 +28,11 @@ export type Event = {
   date_updated: Date
 }
 
+export type EventResponse = {
+  events: Event[]
+  total: number
+}
+
 export type CreateEventType = {
   description: string
   title: string

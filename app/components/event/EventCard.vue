@@ -12,11 +12,13 @@ import {
   CardTitle
 } from '@/ui/shadcn/components/ui/card'
 
+const { formatDateTime, formatRelative } = useDateFormat()
+
 defineProps<{ data: Event }>()
 </script>
 
 <template>
-  <Card :class="cn('w-[320px] h-[380px] gap-2 flex justify-between', $attrs.class ?? '')">
+  <Card :class="cn('w-[320px] h-[400px] gap-2 flex justify-between', $attrs.class ?? '')">
     <CardHeader>
       <CardTitle class="text-center">
         {{ data.title }}
@@ -34,11 +36,13 @@ defineProps<{ data: Event }>()
     </CardContent>
     <div class="flex flex-col justify-between items-center h-[100px] w-full">
       <CardHeader class="w-full">
-        <CardDescription class="w-full border-t-2"> Location: {{ data.location }} </CardDescription>
+        <CardDescription class="w-full border-t-2">
+          Location: {{ data.location.address }}
+        </CardDescription>
         <div class="w-full border-b-2 flex justify-between items-center">
-          <CardDescription>{{ data.start_date }} </CardDescription>
+          <CardDescription>{{ formatDateTime(data.start_date) }} </CardDescription>
           <CardDescription>
-            {{ data.end_date }}
+            {{ formatRelative(data.end_date) }}
           </CardDescription>
         </div>
       </CardHeader>
